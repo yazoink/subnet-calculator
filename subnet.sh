@@ -5,12 +5,11 @@ MAX_SUBNET=64
 
 main() {
     if [[ "$1" != "" ]]; then # if user entered any commandline args, show help/usage and exit
-        help
-        exit 1
+        help "${@}"
     fi
 
-    while [[ 1 ]]; do
-        while [[ 1 ]]; do # this chunk of code prompts the user for a number of subnets, makes sure it's a number and makes sure it's between 1 and 64
+    while true; do
+        while true; do # this chunk of code prompts the user for a number of subnets, makes sure it's a number and makes sure it's between 1 and 64
             read -r -p "Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
             if isNum "$subnetNum"; then
                 if ((subnetNum >= MIN_SUBNET && subnetNum <= MAX_SUBNET)); then
@@ -37,6 +36,7 @@ main() {
         subnetMask=$((255 - addressesPerSubnet + 1))
         cidr=$((24 + borrowedBits))
 
+        printf "~~~~~~~~~~\n"
         printf "Bits Borrowed: %d\n" $borrowedBits
         
         printf "Binary last Byte in SNM: "
@@ -50,21 +50,22 @@ main() {
         printf "Hosts Per Subnet: %d\n" $hostsPerSubnet
         printf "Subnet Mask: .%d\n" $subnetMask
         printf "CIDR: /%d\n" $cidr
+        printf "~~~~~~~~~~\n"
 
         answer='a'
-        while ! answerIsYesOrNo "$answer"; do # make sure answer is a valid response to (Y/n)
+        while ! exitProgramYesOrNo "$answer"; do
             read -r -p "Continue? (Y/n): " answer
         done
-        if [[ "${answer^^}" = "NO" ]] || [[ "${answer^^}" = "N" ]]; then
-            exit 0
-        fi
     done
 }
 
-answerIsYesOrNo() { # returns success if input is a valid answer to (Y/n)
+exitProgramYesOrNo() { # check if input is a valid answer to (Y/n)
     case "${1^^}" in # "${str^^}" will convert a string to uppercase
-        "YES" | "Y" | "" | "NO" | "N")
+        "YES" | "Y" | "")
             return 0
+            ;;
+        "NO" | "N") # if answer is no, exit program
+            exit 0
             ;;
         *)
             return 1
@@ -74,6 +75,11 @@ answerIsYesOrNo() { # returns success if input is a valid answer to (Y/n)
 
 help() { # This is completely useless but every unix program has a usage/help function so I included it
     printf "Usage: ./subnet.sh\n"
+    if [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] && [[ "$2" == "" ]]; then
+        exit 0
+    else
+        exit 1
+    fi
 }
 
 isNum() {
