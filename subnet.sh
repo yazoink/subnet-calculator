@@ -1,34 +1,67 @@
 #!/bin/bash
 
 MIN_SUBNET=1
-MAX_SUBNET=4
+MAX_SUBNET=64
 
-main() { 
-    subnetNum=""
-    borrowedBits=0
-    hostBits=0
-    hostsPerSubnet=0
-    subnetMask=0
-    cidr=24
+main() {
+    if [[ "$1" != "" ]]; then
+        help
+        exit 1
+    fi
 
     while [[ 1 ]]; do
-        read -p "Enter number of subnets: " subnetNum
-        if isNum "$subnetNum" -eq 1; then
-            if [[ $subnetNum -ge MIN_SUBNET ]] && [[ $subnetNum -le MAX_SUBNET ]]; then
+        read -p "Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
+        if isNum "$subnetNum"; then
+            if (($subnetNum >= $MIN_SUBNET && $subnetNum <= $MAX_SUBNET)); then
                 break
             fi
         fi
     done
+    
+    borrowedBits=0
+    result=$((2 ** borrowedBits))
+    while [[ $result -lt $subnetNum ]]; do
+        borrowedBits=$((borrowedBits + 1))
+        result=$((2 ** borrowedBits))
+    done
+
+    binary=(0 0 0 0 0 0 0 0)
+    for ((i=0; i<$borrowedBits; i++)); do
+        binary[i]=1
+    done
+    
+    hostBits=$((8 - borrowedBits))
+    addressesPerSubnet=$((2 ** hostBits))
+    hostsPerSubnet=$((addressesPerSubnet - 2))
+    subnetMask=$((255 - addressesPerSubnet + 1))
+    cidr=$((24 + borrowedBits))
+
+    printf "Bits Borrowed: %d\n" $borrowedBits
+    
+    printf "Binary last Byte in SNM: "
+    for elem in ${binary[@]}; do
+        printf "%d" $elem
+    done
+    printf "\n"
+
+    printf "Subnets: %d\n" $subnetNum
+    printf "Addresses Per Subnet: %d\n" $addressesPerSubnet
+    printf "Hosts Per Subnet: %d\n" $hostsPerSubnet
+    printf "Subnet Mask: .%d\n" $subnetMask
+    printf "CIDR: /%d\n" $cidr
+}
+
+help() {
+    printf "Usage: ./subnet.sh\n"
 }
 
 isNum() {
-    if [[ $1 =~ '^[0-9]+$' ]]; then
-        echo num
-        return 1
+    re='^[0-9]+$'
+    if [[ $1 =~ $re ]]; then
+        return 0
     else
-        echo not num
-        return -1
+        return 1
     fi
 }
 
-main
+main ${@}

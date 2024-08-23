@@ -4,14 +4,6 @@ MIN_SUBNET = 1
 MAX_SUBNET = 64
 
 def main():
-    subnetNum = str()
-    borrowedBits = 0
-    hostBits = 0
-    hostsPerSubnet = 0
-    addressesPerSubnet = 0
-    subnetMask = 0
-    cidr = 24
-
     while True:
         subnetNum = input("Enter number of subnets (" + str(MIN_SUBNET) + "-" + str(MAX_SUBNET) + "): ")
         if subnetNum.isdigit() == True and int(subnetNum) in range(MIN_SUBNET, MAX_SUBNET + 1):
@@ -19,6 +11,7 @@ def main():
 
     subnetNum = int(subnetNum)    
     
+    borrowedBits = 0
     while pow(2, borrowedBits) < subnetNum:
         borrowedBits += 1
 
@@ -26,7 +19,7 @@ def main():
     addressesPerSubnet = pow(2, hostBits)
     hostsPerSubnet = addressesPerSubnet - 2
     subnetMask = 255 - addressesPerSubnet + 1
-    cidr += borrowedBits
+    cidr = 24 + borrowedBits
 
     print("Bits Borrowed: " + str(borrowedBits))
     print("Binary Last Byte in SNM: " + format(subnetMask, '08b'))
