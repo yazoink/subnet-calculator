@@ -38,9 +38,9 @@ main() {
         cidr=$((24 + borrowedBits))
 
         printf "~~~~~~~~~~\n"
-        printf "Bits Borrowed: %d\n" $borrowedBits
+        printf "Bits Borrowed (last byte in SNM): %d\n" $borrowedBits
         
-        printf "Binary last Byte in SNM: "
+        printf "Binary (last byte in SNM): "
         for bit in "${binary[@]}"; do # this makes sure the "binary" array is printed without spaces between the bits
             printf "%d" "$bit"
         done
