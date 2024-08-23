@@ -4,13 +4,13 @@ MIN_SUBNET=1
 MAX_SUBNET=64
 
 main() {
-    if [[ "$1" != "" ]]; then
+    if [[ "$1" != "" ]]; then # if user entered any commandline args, show help/usage and exit
         help
         exit 1
     fi
 
     while [[ 1 ]]; do
-        while [[ 1 ]]; do
+        while [[ 1 ]]; do # this chunk of code prompts the user for a number of subnets, makes sure it's a number and makes sure it's between 1 and 64
             read -p "Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
             if isNum "$subnetNum"; then
                 if (($subnetNum >= $MIN_SUBNET && $subnetNum <= $MAX_SUBNET)); then
@@ -21,14 +21,14 @@ main() {
         
         borrowedBits=0
         result=$((2 ** borrowedBits))
-        while [[ $result -lt $subnetNum ]]; do
-            borrowedBits=$((borrowedBits + 1))
-            result=$((2 ** borrowedBits))
+        while [[ $result -lt $subnetNum ]]; do # while 2 to the power of number of borrowed bits is less than number of subnets
+            borrowedBits=$((borrowedBits + 1)) # increment number of borrowed bits
+            result=$((2 ** borrowedBits)) # (this chunk of finds the amount of borrowed bits needed)
         done
 
         binary=(0 0 0 0 0 0 0 0)
-        for ((i=0; i<$borrowedBits; i++)); do
-            binary[i]=1
+        for ((i=0; i<$borrowedBits; i++)); do # for number of borrowed bits
+            binary[i]=1 # change a 0 in the "binary" array to 1
         done
         
         hostBits=$((8 - borrowedBits))
@@ -40,7 +40,7 @@ main() {
         printf "Bits Borrowed: %d\n" $borrowedBits
         
         printf "Binary last Byte in SNM: "
-        for elem in ${binary[@]}; do
+        for elem in ${binary[@]}; do # this makes sure the binary array is printed without spaces in between the bits
             printf "%d" $elem
         done
         printf "\n"
@@ -51,27 +51,38 @@ main() {
         printf "Subnet Mask: .%d\n" $subnetMask
         printf "CIDR: /%d\n" $cidr
 
-        yesOrNo='a'
-        while [[ "${yesOrNo^^}" != "YES" ]] && [[ "${yesOrNo^^}" != "Y" ]] && [[ "${yesOrNo^^}" != "NO" ]] && [[ "${yesOrNo^^}" != "N" ]] && [[ "${yesOrNo^^}" != "" ]]; do
-            read -p "Continue? (Y/n): " yesOrNo
+        answer='a'
+        while ! answerIsYesOrNo "$answer"; do # make sure answer is a valid response to (Y/n)
+            read -p "Continue? (Y/n): " answer
         done
-        if [[ "${yesOrNo^^}" = "NO" ]] || [[ "${yesOrNo^^}" = "N" ]]; then
+        if [[ "${answer^^}" = "NO" ]] || [[ "${answer^^}" = "N" ]]; then
             exit 0
         fi
     done
 }
 
-help() {
+answerIsYesOrNo() { # returns success if input is a valid answer to (Y/n)
+    case "${1^^}" in # "${str^^}" will convert a string to uppercase
+        "YES" | "Y" | "" | "NO" | "N")
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+help() { # This is completely useless but every unix program has a usage/help function so I included it
     printf "Usage: ./subnet.sh\n"
 }
 
 isNum() {
-    re='^[0-9]+$'
-    if [[ $1 =~ $re ]]; then
+    re='^[0-9]+$' # regex -- from start of string, one or more numerical characters until end of string
+    if [[ $1 =~ $re ]]; then # match given string with regex, return success if found and failure if not
         return 0
     else
         return 1
     fi
 }
 
-main "${@}"
+main "${@}" # "${@}" passes all commandline args to main function
