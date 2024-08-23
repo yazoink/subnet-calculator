@@ -10,7 +10,7 @@ main() {
 
     while true; do
         while true; do # this chunk of code prompts the user for a number of subnets, makes sure it's a number and makes sure it's between 1 and 64
-            read -r -p "Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
+            read -r -p ":: Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
             if isNum "$subnetNum"; then
                 if ((subnetNum >= MIN_SUBNET && subnetNum <= MAX_SUBNET)); then
                     break
@@ -54,7 +54,7 @@ main() {
 
         answer='a'
         while ! continueYesOrNo "$answer"; do
-            read -r -p "Continue? (Y/n): " answer
+            read -r -p ":: Continue? (Y/n): " answer
         done
     done
 }
