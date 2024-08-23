@@ -2,6 +2,7 @@
 
 MIN_SUBNET=1
 MAX_SUBNET=64
+PROMPT="::"
 
 main() {
     if [[ "$1" != "" ]]; then # if user entered any commandline args, show help/usage and exit
@@ -10,7 +11,7 @@ main() {
 
     while true; do
         while true; do # this chunk of code prompts the user for a number of subnets, makes sure it's a number and makes sure it's between 1 and 64
-            read -r -p ":: Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
+            read -r -p "$PROMPT Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
             if isNum "$subnetNum"; then
                 if ((subnetNum >= MIN_SUBNET && subnetNum <= MAX_SUBNET)); then
                     break
@@ -54,7 +55,7 @@ main() {
 
         answer='a'
         while ! continueYesOrNo "$answer"; do
-            read -r -p ":: Continue? (Y/n): " answer
+            read -r -p "$PROMPT Calculate another network? (Y/n): " answer
         done
     done
 }
@@ -74,7 +75,8 @@ continueYesOrNo() { # check if input is a valid answer to (Y/n)
 }
 
 help() { # this is completely useless but every unix program has a usage/help function so I included it
-    printf "Usage: ./subnet.sh\n"
+    printf "subnet.sh -- Gene Mavridis 2024\n\n"
+    printf "Usage:\n\t./subnet.sh\n"
     if [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] && [[ "$2" == "" ]]; then
         exit 0
     else
