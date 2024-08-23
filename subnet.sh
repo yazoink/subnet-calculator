@@ -11,9 +11,9 @@ main() {
 
     while [[ 1 ]]; do
         while [[ 1 ]]; do # this chunk of code prompts the user for a number of subnets, makes sure it's a number and makes sure it's between 1 and 64
-            read -p "Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
+            read -r -p "Enter number of subnets ($MIN_SUBNET-$MAX_SUBNET): " subnetNum
             if isNum "$subnetNum"; then
-                if (($subnetNum >= $MIN_SUBNET && $subnetNum <= $MAX_SUBNET)); then
+                if ((subnetNum >= MIN_SUBNET && subnetNum <= MAX_SUBNET)); then
                     break
                 fi
             fi
@@ -27,7 +27,7 @@ main() {
         done
 
         binary=(0 0 0 0 0 0 0 0)
-        for ((i=0; i<$borrowedBits; i++)); do # for number of borrowed bits
+        for ((i=0; i<borrowedBits; i++)); do # for number of borrowed bits
             binary[i]=1 # change a 0 in the "binary" array to 1
         done
         
@@ -40,12 +40,12 @@ main() {
         printf "Bits Borrowed: %d\n" $borrowedBits
         
         printf "Binary last Byte in SNM: "
-        for elem in ${binary[@]}; do # this makes sure the binary array is printed without spaces in between the bits
-            printf "%d" $elem
+        for elem in "${binary[@]}"; do # this makes sure the binary array is printed without spaces in between the bits
+            printf "%d" "$elem"
         done
         printf "\n"
 
-        printf "Subnets: %d\n" $subnetNum
+        printf "Subnets: %d\n" "$subnetNum"
         printf "Addresses Per Subnet: %d\n" $addressesPerSubnet
         printf "Hosts Per Subnet: %d\n" $hostsPerSubnet
         printf "Subnet Mask: .%d\n" $subnetMask
@@ -53,7 +53,7 @@ main() {
 
         answer='a'
         while ! answerIsYesOrNo "$answer"; do # make sure answer is a valid response to (Y/n)
-            read -p "Continue? (Y/n): " answer
+            read -r -p "Continue? (Y/n): " answer
         done
         if [[ "${answer^^}" = "NO" ]] || [[ "${answer^^}" = "N" ]]; then
             exit 0
