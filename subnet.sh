@@ -41,8 +41,8 @@ main() {
         printf "Bits Borrowed: %d\n" $borrowedBits
         
         printf "Binary last Byte in SNM: "
-        for elem in "${binary[@]}"; do # this makes sure the "binary" array is printed without spaces between the bits
-            printf "%d" "$elem"
+        for bit in "${binary[@]}"; do # this makes sure the "binary" array is printed without spaces between the bits
+            printf "%d" "$bit"
         done
         printf "\n"
 
