@@ -46,10 +46,10 @@ main() {
         printf "\n"
 
         printf "Subnets: %d\n" "$subnetNum"
-        printf "Addresses Per Subnet: %d\n" $addressesPerSubnet
-        printf "Hosts Per Subnet: %d\n" $hostsPerSubnet
-        printf "Subnet Mask: .%d\n" $subnetMask
-        printf "CIDR: /%d\n" $cidr
+        printf "Addresses Per Subnet: %d\n" "$addressesPerSubnet"
+        printf "Hosts Per Subnet: %d\n" "$hostsPerSubnet"
+        printf "Subnet Mask: .%d\n" "$subnetMask"
+        printf "CIDR: /%d\n" "$cidr"
         printf "~~~~~~~~~~\n"
 
         answer='a'
