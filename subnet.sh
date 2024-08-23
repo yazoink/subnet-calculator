@@ -5,7 +5,7 @@ MAX_SUBNET=64
 
 main() {
     if [[ "$1" != "" ]]; then # if user entered any commandline args, show help/usage and exit
-        help "${@}"
+        help "$@"
     fi
 
     while true; do
@@ -53,13 +53,13 @@ main() {
         printf "~~~~~~~~~~\n"
 
         answer='a'
-        while ! exitProgramYesOrNo "$answer"; do
+        while ! continueYesOrNo "$answer"; do
             read -r -p "Continue? (Y/n): " answer
         done
     done
 }
 
-exitProgramYesOrNo() { # check if input is a valid answer to (Y/n)
+continueYesOrNo() { # check if input is a valid answer to (Y/n)
     case "${1^^}" in # "${str^^}" will convert a string to uppercase
         "YES" | "Y" | "")
             return 0
@@ -91,4 +91,4 @@ isNum() {
     fi
 }
 
-main "${@}" # "${@}" passes all commandline args to main function
+main "$@" # "$@" passes all commandline args to main function
