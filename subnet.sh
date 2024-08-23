@@ -23,7 +23,7 @@ main() {
         result=$((2 ** borrowedBits))
         while [[ $result -lt $subnetNum ]]; do # while 2 to the power of number of borrowed bits is less than number of subnets
             borrowedBits=$((borrowedBits + 1)) # increment number of borrowed bits
-            result=$((2 ** borrowedBits)) # (this chunk of finds the amount of borrowed bits needed)
+            result=$((2 ** borrowedBits)) # (this chunk of code finds the amount of borrowed bits needed)
         done
 
         binary=(0 0 0 0 0 0 0 0)
