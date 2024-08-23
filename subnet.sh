@@ -64,4 +64,4 @@ isNum() {
     fi
 }
 
-main ${@}
+main "${@}"
