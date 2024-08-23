@@ -73,7 +73,7 @@ continueYesOrNo() { # check if input is a valid answer to (Y/n)
     esac
 }
 
-help() { # This is completely useless but every unix program has a usage/help function so I included it
+help() { # this is completely useless but every unix program has a usage/help function so I included it
     printf "Usage: ./subnet.sh\n"
     if [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] && [[ "$2" == "" ]]; then
         exit 0
@@ -83,7 +83,7 @@ help() { # This is completely useless but every unix program has a usage/help fu
 }
 
 isNum() {
-    re='^[0-9]+$' # regex -- from start of string, one or more numerical characters until end of string
+    re='^[0-9]+$' # regex -- from start of string, match one or more numerical characters until end of string
     if [[ $1 =~ $re ]]; then # match given string with regex, return success if found and failure if not
         return 0
     else
