@@ -50,7 +50,7 @@ main() {
         printf "Subnets: %d\n" "$subnetNum"
         printf "Addresses Per Subnet: %d\n" "$addressesPerSubnet"
         printf "Hosts Per Subnet: %d\n" "$hostsPerSubnet"
-        printf "Subnet Mask: .%d\n" "$subnetMask"
+        printf "Subnet Mask Last Byte: .%d\n" "$subnetMask"
         printf "CIDR: /%d\n" "$cidr"
         printf "%s\n" $SEPARATOR
 
@@ -77,7 +77,7 @@ continueYesOrNo() { # check if input is a valid answer to (Y/n)
 
 help() { # this is completely useless but every unix program has a usage/help function so I included it
     printf "subnet.sh -- Gene Mavridis 2024\n\n"
-    printf "Usage:\n\t./subnet.sh\n"
+    printf "Usage:\n\t./subnet.sh {[--help]|[-h]}\n"
     if [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] && [[ "$2" == "" ]]; then
         exit 0
     else
