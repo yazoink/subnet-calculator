@@ -3,6 +3,7 @@
 MIN_SUBNET=1
 MAX_SUBNET=64
 PROMPT="::"
+SEPARATOR="~~~~~~~~~~"
 
 main() {
     if [[ "$1" != "" ]]; then # if user entered any commandline args, show help/usage and exit
@@ -37,7 +38,7 @@ main() {
         subnetMask=$((255 - addressesPerSubnet + 1))
         cidr=$((24 + borrowedBits))
 
-        printf "~~~~~~~~~~\n"
+        printf "%s\n" $SEPARATOR
         printf "Bits Borrowed (last byte in SNM): %d\n" $borrowedBits
         
         printf "Binary (last byte in SNM): "
@@ -51,7 +52,7 @@ main() {
         printf "Hosts Per Subnet: %d\n" "$hostsPerSubnet"
         printf "Subnet Mask: .%d\n" "$subnetMask"
         printf "CIDR: /%d\n" "$cidr"
-        printf "~~~~~~~~~~\n"
+        printf "%s\n" $SEPARATOR
 
         answer='a'
         while ! continueYesOrNo "$answer"; do
